@@ -226,7 +226,7 @@ def login_bitzh(username, password, headless=False):
                         driver.find_element(By.ID, 'password').send_keys(password)
 
                         # 验证码处理（带重试）
-                        for _ in range(max_retries):
+                        for _ in range(3):
                             captcha_text = retry_captcha(driver)
 
                             # print("识别验证码为：", captcha_text)
@@ -235,8 +235,6 @@ def login_bitzh(username, password, headless=False):
                                 driver.find_element(By.ID, 'authcode').clear()
                                 driver.find_element(By.ID, 'authcode').send_keys(captcha_text)
                                 break
-                            else:
-                                raise Exception("验证码识别失败")
 
                         # 提交登录
                         driver.find_element(By.ID, 'submit1').click()
@@ -255,7 +253,7 @@ def login_bitzh(username, password, headless=False):
                                     # 3. 检查元素是否可见
                                     if driver.execute_script("return arguments[0].style.display !== 'none'", error):
                                         # 4. 如果可见，提取错误信息
-                                        if driver.execute_script("return arguments[0].style.display !== 'none'", error) == "图形验证码错误":
+                                        if error.text.strip() == "图形验证码错误":
                                             continue
                                         error_message = error.text.strip()
                                         break  # 找到第一个可见的错误信息后退出

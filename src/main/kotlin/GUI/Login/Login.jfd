@@ -9,25 +9,26 @@ new FormModel {
 			name: "this"
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/Logo.png" )
 			"title": "iFuyo"
+			"background": sfield java.awt.Color orange
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label1"
-				"text": "辅 佑"
+				"text": "辅佑"
 				"font": new java.awt.Font( "汉仪叶叶相思体简", 0, 80 )
 				"foreground": sfield java.awt.Color darkGray
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 185
-				"y": 40
+				"x": 170
+				"y": 15
 				"height": 90
 			} )
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button1"
 				"text": "登  录"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 4, false )
+				"font": new java.awt.Font( "Microsoft YaHei UI", 1, 20 )
 				"background": new java.awt.Color( 251, 175, 94, 255 )
 				"foreground": new java.awt.Color( 255, 255, 255, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 355
-				"y": 290
+				"y": 285
 				"height": 43
 				"width": 120
 			} )
@@ -35,7 +36,7 @@ new FormModel {
 				name: "label2"
 				"icon": new com.jformdesigner.model.SwingIcon( 0, "/Logo.png" )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 345
+				"x": 365
 				"y": 130
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
@@ -44,19 +45,20 @@ new FormModel {
 				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 10, false )
 				"foreground": sfield java.awt.Color darkGray
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 65
-				"y": 175
+				"x": 80
+				"y": 160
 				"width": 90
 				"height": 40
 			} )
 			add( new FormComponent( "javax.swing.JTextField" ) {
 				name: "textField1"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 5, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 5, false )
+				"horizontalAlignment": 2
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 150
-				"y": 175
+				"x": 160
+				"y": 160
 				"height": 45
-				"width": 250
+				"width": 240
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label4"
@@ -64,22 +66,63 @@ new FormModel {
 				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 10, false )
 				"foreground": sfield java.awt.Color darkGray
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 75
-				"y": 235
+				"x": 90
+				"y": 225
 				"height": 40
 			} )
 			add( new FormComponent( "javax.swing.JPasswordField" ) {
 				name: "passwordField1"
-				"font": new com.jformdesigner.model.SwingDerivedFont( null, 1, 5, false )
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 65536, 5, false )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 150
-				"y": 235
+				"x": 160
+				"y": 225
 				"width": 250
 				"height": 45
 			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label5"
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 60
+				"y": 60
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label7"
+				"text": "Fuyo"
+				"font": new java.awt.Font( "Yu Gothic UI", 0, 40 )
+				"foreground": new java.awt.Color( 102, 102, 102, 255 )
+				"background": new java.awt.Color( 204, 204, 204, 255 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 325
+				"y": 35
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label8"
+				"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 2, false )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 110
+				"y": 105
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label9"
+				"text": "随机诗句"
+				"font": new java.awt.Font( "汉仪叶叶相思体简", 0, 16 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 100
+				"y": 105
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator1"
+				"background": new java.awt.Color( 204, 204, 204, 255 )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 130
+				"y": 80
+				"width": 300
+				"height": 10
+			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 550, 375 )
+			"size": new java.awt.Dimension( 550, 345 )
 		} )
 	}
 }

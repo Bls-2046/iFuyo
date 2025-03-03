@@ -1,0 +1,222 @@
+JFDML JFormDesigner: "8.2.4.0.393" Java: "21.0.6" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/Logo.png" )
+			"title": "iFuyo ☘"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "Header"
+				"border": &LineBorder0 new javax.swing.border.LineBorder( sfield java.awt.Color black, 1, false )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "                  "
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "HeaderContent"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label2"
+						"text": "        "
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "West"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label3"
+						"text": "你好，~"
+						"font": new java.awt.Font( "汉仪叶叶相思体简", 0, 20 )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label6"
+						"text": "     "
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "South"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "Sidebar"
+				"border": #LineBorder0
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "AppName"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label4"
+						"text": "      "
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "North"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+						name: "panel6"
+						add( new FormComponent( "javax.swing.JSeparator" ) {
+							name: "separator2"
+							"foreground": new java.awt.Color( 0, 0, 0, 255 )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "Center"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label7"
+							"text": "       "
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "North"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label8"
+							"text": "            "
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "South"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "South"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "LittleTitle"
+						"text": "     辅 佑     "
+						"foreground": sfield java.awt.Color darkGray
+						"font": new java.awt.Font( "汉仪叶叶相思体简", 1, 22 )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "North"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "NavBar"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+						"columns": 1
+						"rows": 7
+						"hgap": 20
+						"vgap": 20
+					} ) {
+						name: "NavBarOptions"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToHomeButton"
+							"text": "\ud83c\udfe0 首页"
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+							"foreground": sfield java.awt.Color darkGray
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToProfileButton"
+							"text": " \ud83c\udf1f 个人资料"
+							"foreground": sfield java.awt.Color darkGray
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToTimetableButton"
+							"text": "\ud83d\udcc5  课表"
+							"foreground": sfield java.awt.Color darkGray
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToScheduleButton"
+							"text": "☀ 日程安排"
+							"foreground": sfield java.awt.Color darkGray
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToDeepSeekButton"
+							"text": " \ud83d\udc0b DeepSeek"
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+							"foreground": sfield java.awt.Color darkGray
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToWebButton"
+							"text": "\ud83c\udf0f 便捷网站"
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+							"foreground": sfield java.awt.Color darkGray
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "ToConnectButton"
+							"text": "\ud83d\udcde联系我们"
+							"foreground": sfield java.awt.Color darkGray
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, 5, false )
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "North"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+						name: "Footer"
+						add( new FormComponent( "javax.swing.JSeparator" ) {
+							name: "separator3"
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "South"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "FooterContent"
+							"text": "               @ 2025 Bls-2046"
+							"foreground": sfield java.awt.Color darkGray
+							"font": new com.jformdesigner.model.SwingDerivedFont( null, 0, -2, false )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "Center"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "South"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "West"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "HomeContent"
+				"border": #LineBorder0
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 570, 730 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "ProfileContent"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 726 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "TimetableContent"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 426, 730 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "ScheduleContent"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 1380 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "DeepSeekDialogue"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 426, 1380 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "GoOthorWeb"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 2050 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "contactMethod"
+			"border": #LineBorder0
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 426, 2050 )
+			"size": new java.awt.Dimension( 424, 654 )
+		} )
+	}
+}
