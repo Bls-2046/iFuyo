@@ -8,14 +8,9 @@
 四、上传网页图标和 url 快速访问网页；
 
 #使用
-｀｀｀maven
+
 https://github.com/Bls-2046/iFuyo.git
-｀｀｀
 
-｀｀｀maven
 nvm install clean
-｀｀｀
 
-｀｀｀python
 pipe install -r requirements.txt
-｀｀｀
