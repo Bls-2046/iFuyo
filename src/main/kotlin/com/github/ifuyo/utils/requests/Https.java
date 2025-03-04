@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -22,7 +21,49 @@ public class Https {
     private static final Logger logger = LoggerFactory.getLogger(Https.class);
 
     /**
-     * 发送 GET 请求并返回指定类型的对象（支持有参和无参）
+     * 发送 GET 请求并返回指定类型的对象（支持无参请求）
+     *
+     * @param url     请求 URL（需要包含协议，如 "https://"）
+     * @param typeRef 类型引用（用于显式指定泛型类型）
+     * @return 返回指定类型的对象，如果发生异常则返回 null
+     */
+    public static <T> T get(final String url, TypeReference<T> typeRef) {
+        return ExceptionHandler.handle(() -> {
+            // 校验 URL 合法性
+            validateUrl(url);
+
+            // 最终发起请求的 url
+
+            // 创建 HTTP 连接
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000); // 5 秒连接超时
+            connection.setReadTimeout(10000);   // 10 秒读取超时
+
+            // 发送请求并获取响应
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) { // 200
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    // 将 JSON 响应解析为指定类型的对象
+                    return objectMapper.readValue(response.toString(), typeRef);
+                }
+            } else {
+                // 处理非 200 响应码
+                String errorMessage = "HTTP Request Failed. URL: " + url + ", Response Code: " + responseCode;
+                logger.error(errorMessage);
+                throw new HttpRequestException(errorMessage, responseCode);
+            }
+        }, "HTTP Request Failed");
+    }
+
+    /**
+     * 发送 GET 请求并返回指定类型的对象（支持有参请求）
      *
      * @param url     请求 URL（需要包含协议，如 "https://"）
      * @param params  查询参数（可选，格式为 {"key1": "value1", "key2": "value2"}）

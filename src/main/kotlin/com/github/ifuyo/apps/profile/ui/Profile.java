@@ -65,7 +65,7 @@ public class Profile extends JFrame {
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
         setTitle("iFuyo \u2618");
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== Header ========
