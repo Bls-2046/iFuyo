@@ -34,3 +34,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# 忽略 .env 文件
+.env
+
+# 保留 .env.template 文件
+!.env.template

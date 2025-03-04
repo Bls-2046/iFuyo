@@ -128,8 +128,12 @@ def process_captcha(image_path):
     enhancer = ImageEnhance.Contrast(image) # 增强对比度
     image = enhancer.enhance(2.0)
 
-    # 保存处理后的图片
-    processed_image_path = 'processed_captcha.png'
+
+    processed_image_path = "src/main/resources/python/processed_captcha.png"
+    # 创建目录（如果不存在）
+    os.makedirs(os.path.dirname(processed_image_path), exist_ok=True)
+
+    # 保存处理后的图片到指定路径
     image.save(processed_image_path)
 
     # 使用 EasyOCR 识别验证码
@@ -145,9 +149,11 @@ def process_captcha(image_path):
 # region # 验证码截图并进行识别
 def retry_captcha(driver):
     """ 截取并识别验证码 """
+    captcha_raw_path = "src/main/resources/python/captcha_raw.png"
+
     captcha_element = driver.find_element(By.ID, 'verifycode')
-    captcha_element.screenshot('captcha_raw.png')  # 截取验证码图片
-    captcha_text = process_captcha('captcha_raw.png')  # 识别验证码
+    captcha_element.screenshot(captcha_raw_path)  # 截取验证码图片
+    captcha_text = process_captcha(captcha_raw_path)  # 识别验证码
     return captcha_text
 # endregion
 

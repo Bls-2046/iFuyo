@@ -2,16 +2,15 @@
  * Created by JFormDesigner on Mon Mar 03 12:10:28 CST 2025
  */
 
-package GUI.Login;
+package com.github.ifuyo.apps.login.ui;
 
-import javax.swing.border.*;
 import org.json.JSONObject;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import javax.swing.*;
-import GUI.Profile.Profile;
+import com.github.ifuyo.apps.profile.ui.Profile;
 
 /**
  * @author astar
