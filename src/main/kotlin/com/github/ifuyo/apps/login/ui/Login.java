@@ -9,8 +9,11 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import javax.swing.*;
 import com.github.ifuyo.apps.profile.ui.Profile;
+
+import static com.github.ifuyo.apps.Api.getSentence;
 
 /**
  * @author astar
@@ -19,6 +22,12 @@ public class Login extends JFrame {
     public Login() {
         initComponents();
         addLoginButtonListener();
+        setVerseLabel();
+    }
+
+    private void setVerseLabel() {
+        String verse = Objects.requireNonNull(getSentence()).getData().getContent(); // 获取诗句
+        Verse.setText(verse); // 设置到 Verse 标签
     }
 
     private void initComponents() {
@@ -33,14 +42,15 @@ public class Login extends JFrame {
         label5 = new JLabel();
         label7 = new JLabel();
         label8 = new JLabel();
-        label9 = new JLabel();
+        Verse = new JLabel();
         separator1 = new JSeparator();
+        separator2 = new JSeparator();
 
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
         setTitle("iFuyo");
         setBackground(Color.orange);
-        Container contentPane = getContentPane();
+        var contentPane = getContentPane();
         contentPane.setLayout(null);
 
         //---- label1 ----
@@ -96,24 +106,31 @@ public class Login extends JFrame {
         label7.setForeground(new Color(0x666666));
         label7.setBackground(new Color(0xcccccc));
         contentPane.add(label7);
-        label7.setBounds(new Rectangle(new Point(325, 35), label7.getPreferredSize()));
+        label7.setBounds(new Rectangle(new Point(325, 25), label7.getPreferredSize()));
 
         //---- label8 ----
         label8.setFont(label8.getFont().deriveFont(label8.getFont().getSize() + 2f));
         contentPane.add(label8);
         label8.setBounds(new Rectangle(new Point(110, 105), label8.getPreferredSize()));
 
-        //---- label9 ----
-        label9.setText("\u968f\u673a\u8bd7\u53e5");
-        label9.setFont(new Font("\u6c49\u4eea\u53f6\u53f6\u76f8\u601d\u4f53\u7b80", Font.PLAIN, 16));
-        contentPane.add(label9);
-        label9.setBounds(new Rectangle(new Point(100, 105), label9.getPreferredSize()));
+        //---- Verse ----
+        Verse.setText("\u968f\u673a\u8bd7\u53e5");
+        Verse.setFont(new Font("\u6c49\u4eea\u53f6\u53f6\u76f8\u601d\u4f53\u7b80", Font.PLAIN, 18));
+        contentPane.add(Verse);
+        Verse.setHorizontalAlignment(SwingConstants.CENTER);
+        Verse.setBounds(10, 105, 545, Verse.getPreferredSize().height);
 
         //---- separator1 ----
-        separator1.setBackground(new Color(0xcccccc));
+        separator1.setBackground(new Color(0x333333));
         separator1.setForeground(new Color(0x333333));
         contentPane.add(separator1);
-        separator1.setBounds(130, 80, 300, 10);
+        separator1.setBounds(130, 70, 300, 10);
+
+        //---- separator2 ----
+        separator2.setBackground(new Color(0x333333));
+        separator2.setForeground(new Color(0x333333));
+        contentPane.add(separator2);
+        separator2.setBounds(315, 75, 100, 10);
 
         contentPane.setPreferredSize(new Dimension(550, 345));
         pack();
@@ -207,7 +224,8 @@ public class Login extends JFrame {
     private JLabel label5;
     private JLabel label7;
     private JLabel label8;
-    private JLabel label9;
+    private JLabel Verse;
     private JSeparator separator1;
+    private JSeparator separator2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

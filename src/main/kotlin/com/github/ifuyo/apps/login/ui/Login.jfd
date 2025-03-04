@@ -93,7 +93,7 @@ new FormModel {
 				"background": new java.awt.Color( 204, 204, 204, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 325
-				"y": 35
+				"y": 25
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label8"
@@ -103,21 +103,32 @@ new FormModel {
 				"y": 105
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label9"
+				name: "Verse"
 				"text": "随机诗句"
-				"font": new java.awt.Font( "汉仪叶叶相思体简", 0, 16 )
+				"font": new java.awt.Font( "汉仪叶叶相思体简", 0, 18 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
-				"x": 100
+				"x": 10
 				"y": 105
+				"width": 545
 			} )
 			add( new FormComponent( "javax.swing.JSeparator" ) {
 				name: "separator1"
-				"background": new java.awt.Color( 204, 204, 204, 255 )
+				"background": new java.awt.Color( 51, 51, 51, 255 )
 				"foreground": new java.awt.Color( 51, 51, 51, 255 )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
 				"x": 130
-				"y": 80
+				"y": 70
 				"width": 300
+				"height": 10
+			} )
+			add( new FormComponent( "javax.swing.JSeparator" ) {
+				name: "separator2"
+				"background": new java.awt.Color( 51, 51, 51, 255 )
+				"foreground": new java.awt.Color( 51, 51, 51, 255 )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.NullConstraints ) {
+				"x": 315
+				"y": 75
+				"width": 100
 				"height": 10
 			} )
 		}, new FormLayoutConstraints( null ) {
@@ -126,4 +137,3 @@ new FormModel {
 		} )
 	}
 }
-
