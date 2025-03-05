@@ -6,7 +6,7 @@ new FormModel {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/Logo.png" )
-			"title": "iFuyo ☘"
+			"title": "iFuyo"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "Header"
 				"border": &LineBorder0 new javax.swing.border.LineBorder( sfield java.awt.Color black, 1, false )
@@ -175,34 +175,6 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 570, 730 )
-		} )
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "ProfileContent"
-			"border": #LineBorder0
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 726 )
-			"size": new java.awt.Dimension( 424, 654 )
-		} )
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "TimetableContent"
-			"border": #LineBorder0
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 426, 730 )
-			"size": new java.awt.Dimension( 424, 654 )
-		} )
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "ScheduleContent"
-			"border": #LineBorder0
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 1380 )
-			"size": new java.awt.Dimension( 424, 654 )
-		} )
-		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "DeepSeekDialogue"
-			"border": #LineBorder0
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 426, 1380 )
-			"size": new java.awt.Dimension( 424, 654 )
 		} )
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "GoOthorWeb"

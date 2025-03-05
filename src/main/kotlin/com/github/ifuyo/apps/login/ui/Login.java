@@ -13,7 +13,9 @@ import java.util.Objects;
 import javax.swing.*;
 import com.github.ifuyo.apps.profile.ui.Profile;
 
-import static com.github.ifuyo.apps.Api.getSentence;
+
+import static com.github.ifuyo.apps.Api.getVerseV1;
+import static com.github.ifuyo.apps.Api.getVerseV2;
 
 /**
  * @author astar
@@ -26,15 +28,16 @@ public class Login extends JFrame {
     }
 
     private void setVerseLabel() {
-        String verse = Objects.requireNonNull(getSentence()).getData().getContent(); // 获取诗句
+        String verse = Objects.requireNonNull(getVerseV1()).getContent(); // 获取诗句
+        String author = "—" + getVerseV1().getAuthor();
         Verse.setText(verse); // 设置到 Verse 标签
+        Author.setText(author);
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
         label1 = new JLabel();
         button1 = new JButton();
-        label2 = new JLabel();
         label3 = new JLabel();
         textField1 = new JTextField();
         label4 = new JLabel();
@@ -45,6 +48,7 @@ public class Login extends JFrame {
         Verse = new JLabel();
         separator1 = new JSeparator();
         separator2 = new JSeparator();
+        Author = new JLabel();
 
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
@@ -58,51 +62,45 @@ public class Login extends JFrame {
         label1.setFont(new Font("\u6c49\u4eea\u53f6\u53f6\u76f8\u601d\u4f53\u7b80", Font.PLAIN, 80));
         label1.setForeground(Color.darkGray);
         contentPane.add(label1);
-        label1.setBounds(170, 15, label1.getPreferredSize().width, 90);
+        label1.setBounds(160, 15, label1.getPreferredSize().width, 90);
 
         //---- button1 ----
         button1.setText("\u767b  \u5f55");
-        button1.setFont(new Font("Microsoft YaHei UI", Font.BOLD, 20));
-        button1.setBackground(new Color(0xfbaf5e));
-        button1.setForeground(Color.white);
+        button1.setFont(new Font("Microsoft YaHei UI", Font.PLAIN, 18));
+        button1.setForeground(Color.darkGray);
         contentPane.add(button1);
-        button1.setBounds(355, 285, 120, 43);
-
-        //---- label2 ----
-        label2.setIcon(new ImageIcon(getClass().getResource("/Logo.png")));
-        contentPane.add(label2);
-        label2.setBounds(new Rectangle(new Point(365, 130), label2.getPreferredSize()));
+        button1.setBounds(225, 290, 120, 43);
 
         //---- label3 ----
         label3.setText("\u7528\u6237\u540d\uff1a");
-        label3.setFont(label3.getFont().deriveFont(label3.getFont().getStyle() | Font.BOLD, label3.getFont().getSize() + 10f));
+        label3.setFont(label3.getFont().deriveFont(label3.getFont().getStyle() & ~Font.BOLD, label3.getFont().getSize() + 9f));
         label3.setForeground(Color.darkGray);
         contentPane.add(label3);
-        label3.setBounds(80, 160, 90, 40);
+        label3.setBounds(100, 164, 90, 40);
 
         //---- textField1 ----
         textField1.setFont(textField1.getFont().deriveFont(textField1.getFont().getStyle() & ~Font.BOLD, textField1.getFont().getSize() + 5f));
         textField1.setHorizontalAlignment(SwingConstants.LEFT);
         contentPane.add(textField1);
-        textField1.setBounds(160, 160, 240, 45);
+        textField1.setBounds(185, 165, 260, 40);
 
         //---- label4 ----
         label4.setText("\u5bc6\u7801\uff1a");
-        label4.setFont(label4.getFont().deriveFont(label4.getFont().getStyle() | Font.BOLD, label4.getFont().getSize() + 10f));
+        label4.setFont(label4.getFont().deriveFont(label4.getFont().getStyle() & ~Font.BOLD, label4.getFont().getSize() + 8f));
         label4.setForeground(Color.darkGray);
         contentPane.add(label4);
-        label4.setBounds(90, 225, label4.getPreferredSize().width, 40);
+        label4.setBounds(110, 229, label4.getPreferredSize().width, 40);
 
         //---- passwordField1 ----
         passwordField1.setFont(passwordField1.getFont().deriveFont(passwordField1.getFont().getStyle() & ~Font.BOLD, passwordField1.getFont().getSize() + 5f));
         contentPane.add(passwordField1);
-        passwordField1.setBounds(160, 225, 250, 45);
+        passwordField1.setBounds(185, 230, 260, 40);
         contentPane.add(label5);
         label5.setBounds(new Rectangle(new Point(60, 60), label5.getPreferredSize()));
 
         //---- label7 ----
         label7.setText("Fuyo");
-        label7.setFont(new Font("Yu Gothic UI", Font.PLAIN, 40));
+        label7.setFont(new Font("Yu Gothic UI", Font.BOLD, 40));
         label7.setForeground(new Color(0x666666));
         label7.setBackground(new Color(0xcccccc));
         contentPane.add(label7);
@@ -115,9 +113,9 @@ public class Login extends JFrame {
 
         //---- Verse ----
         Verse.setText("\u968f\u673a\u8bd7\u53e5");
-        Verse.setFont(new Font("\u6c49\u4eea\u53f6\u53f6\u76f8\u601d\u4f53\u7b80", Font.PLAIN, 18));
-        contentPane.add(Verse);
+        Verse.setFont(new Font("\u6977\u4f53", Font.BOLD, 18));
         Verse.setHorizontalAlignment(SwingConstants.CENTER);
+        contentPane.add(Verse);
         Verse.setBounds(10, 105, 545, Verse.getPreferredSize().height);
 
         //---- separator1 ----
@@ -132,7 +130,13 @@ public class Login extends JFrame {
         contentPane.add(separator2);
         separator2.setBounds(315, 75, 100, 10);
 
-        contentPane.setPreferredSize(new Dimension(550, 345));
+        //---- Author ----
+        Author.setText("\u4f5c\u8005");
+        Author.setFont(new Font("\u6977\u4f53", Font.BOLD, 18));
+        contentPane.add(Author);
+        Author.setBounds(375, 130, 200, Author.getPreferredSize().height);
+
+        contentPane.setPreferredSize(new Dimension(550, 360));
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
@@ -216,7 +220,6 @@ public class Login extends JFrame {
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
     private JLabel label1;
     private JButton button1;
-    private JLabel label2;
     private JLabel label3;
     private JTextField textField1;
     private JLabel label4;
@@ -227,5 +230,6 @@ public class Login extends JFrame {
     private JLabel Verse;
     private JSeparator separator1;
     private JSeparator separator2;
+    private JLabel Author;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
 }

@@ -55,16 +55,12 @@ public class Profile extends JFrame {
         separator3 = new JSeparator();
         FooterContent = new JLabel();
         HomeContent = new JPanel();
-        ProfileContent = new JPanel();
-        TimetableContent = new JPanel();
-        ScheduleContent = new JPanel();
-        DeepSeekDialogue = new JPanel();
         GoOthorWeb = new JPanel();
         contactMethod = new JPanel();
 
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/Logo.png")).getImage());
-        setTitle("iFuyo \u2618");
+        setTitle("iFuyo");
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
@@ -215,30 +211,6 @@ public class Profile extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
 
-        //======== ProfileContent ========
-        {
-            ProfileContent.setBorder(LineBorder.createBlackLineBorder());
-            ProfileContent.setLayout(new BorderLayout());
-        }
-
-        //======== TimetableContent ========
-        {
-            TimetableContent.setBorder(LineBorder.createBlackLineBorder());
-            TimetableContent.setLayout(new BorderLayout());
-        }
-
-        //======== ScheduleContent ========
-        {
-            ScheduleContent.setBorder(LineBorder.createBlackLineBorder());
-            ScheduleContent.setLayout(new BorderLayout());
-        }
-
-        //======== DeepSeekDialogue ========
-        {
-            DeepSeekDialogue.setBorder(LineBorder.createBlackLineBorder());
-            DeepSeekDialogue.setLayout(new BorderLayout());
-        }
-
         //======== GoOthorWeb ========
         {
             GoOthorWeb.setBorder(LineBorder.createBlackLineBorder());
@@ -333,10 +305,6 @@ public class Profile extends JFrame {
     private JSeparator separator3;
     private JLabel FooterContent;
     private JPanel HomeContent;
-    private JPanel ProfileContent;
-    private JPanel TimetableContent;
-    private JPanel ScheduleContent;
-    private JPanel DeepSeekDialogue;
     private JPanel GoOthorWeb;
     private JPanel contactMethod;
     // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on

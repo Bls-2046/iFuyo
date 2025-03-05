@@ -35,7 +35,51 @@ public class Api {
         return Https.get("https://v2.jinrishici.com/token", new TypeReference<TokenResponse>() {});
     }
 
-    public static class VerseResponse {
+    public static class VerseV1Response {
+        private String content;
+        private String origin;
+        private String author;
+        private String category;
+
+        // Getter 和 Setter 方法
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getOrigin() {
+            return origin;
+        }
+
+        public void setOrigin(String origin) {
+            this.origin = origin;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+    }
+
+    public static VerseV1Response getVerseV1() {
+        return Https.get("https://v1.jinrishici.com/all.json", new TypeReference<VerseV1Response>() {});
+    }
+
+    public static class VerseV2Response {
         private String status;
         private Data data;
         private String token;
@@ -202,7 +246,7 @@ public class Api {
         }
     }
 
-    public static VerseResponse getSentence() {
+    public static VerseV2Response getVerseV2() {
         String token;
         try {
             token = getToken().getData();
@@ -213,6 +257,6 @@ public class Api {
         }
         Map<String, String> headers = new HashMap<>();
         headers.put("X-User-Token", token); // 添加 Token 到请求头
-        return Https.get("https://v2.jinrishici.com/sentence", null, headers, new TypeReference<VerseResponse>() {});
+        return Https.get("https://v2.jinrishici.com/sentence", null, headers, new TypeReference<VerseV2Response>() {});
     }
 }
