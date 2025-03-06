@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue Mar 04 23:26:35 CST 2025
  */
 
-package com.github.ifuyo.apps.home.ui;
+package com.github.ifuyo.apps.navigation.home.ui;
 
 import java.awt.*;
 import javax.swing.*;

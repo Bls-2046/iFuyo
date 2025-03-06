@@ -12,7 +12,7 @@ public class Settings {
     private Settings() {}
 
     // 应用主题
-    private static void applyTheme() {
+    private static void globalSettings() {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf()); // 设置 FlatIntelliJLaf 主题
             System.out.println("Initialized with theme: " + DEFAULT_THEME);
@@ -23,7 +23,7 @@ public class Settings {
 
     // 初始化配置
     public static void initialize() {
-        applyTheme(); // 应用默认主题
+        globalSettings(); // 应用默认主题
 
     }
 }

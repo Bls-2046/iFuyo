@@ -1,8 +1,8 @@
 /*
- * Created by JFormDesigner on Tue Mar 04 23:25:35 CST 2025
+ * Created by JFormDesigner on Tue Mar 04 23:27:22 CST 2025
  */
 
-package com.github.ifuyo.apps.contact.ui;
+package com.github.ifuyo.apps.navigation.timetable.ui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author astar
  */
-public class Contact extends JFrame {
-    public Contact() {
+public class TimeTable extends JFrame {
+    public TimeTable() {
         initComponents();
     }
 

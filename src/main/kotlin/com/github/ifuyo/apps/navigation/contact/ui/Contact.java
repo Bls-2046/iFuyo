@@ -1,8 +1,8 @@
 /*
- * Created by JFormDesigner on Tue Mar 04 23:26:03 CST 2025
+ * Created by JFormDesigner on Tue Mar 04 23:25:35 CST 2025
  */
 
-package com.github.ifuyo.apps.DeepSeek.dialogue.ui;
+package com.github.ifuyo.apps.navigation.contact.ui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author astar
  */
-public class DeepSeekDialogue extends JFrame {
-    public DeepSeekDialogue() {
+public class Contact extends JFrame {
+    public Contact() {
         initComponents();
     }
 

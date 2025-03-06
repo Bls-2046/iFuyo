@@ -94,6 +94,7 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>2.1.10</version>
         </dependency>
+
         <!-- #region 第三方依赖库 -->
         <!-- org.json 依赖 -->
         <dependency>
@@ -106,17 +107,6 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.2.1</version>
-        </dependency>
-        <!-- SLF4J 日志 -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.36</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.36</version>
         </dependency>
         <!-- Jackson -->
         <dependency>

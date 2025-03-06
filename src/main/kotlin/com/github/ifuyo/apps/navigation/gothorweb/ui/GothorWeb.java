@@ -1,8 +1,8 @@
 /*
- * Created by JFormDesigner on Tue Mar 04 23:27:22 CST 2025
+ * Created by JFormDesigner on Tue Mar 04 23:26:22 CST 2025
  */
 
-package com.github.ifuyo.apps.timetable.ui;
+package com.github.ifuyo.apps.navigation.gothorweb.ui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author astar
  */
-public class TimeTable extends JFrame {
-    public TimeTable() {
+public class GothorWeb extends JFrame {
+    public GothorWeb() {
         initComponents();
     }
 

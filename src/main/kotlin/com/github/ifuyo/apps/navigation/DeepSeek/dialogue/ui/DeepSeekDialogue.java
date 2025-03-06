@@ -1,8 +1,8 @@
 /*
- * Created by JFormDesigner on Tue Mar 04 23:26:22 CST 2025
+ * Created by JFormDesigner on Tue Mar 04 23:26:03 CST 2025
  */
 
-package com.github.ifuyo.apps.gothorweb.ui;
+package com.github.ifuyo.apps.navigation.DeepSeek.dialogue.ui;
 
 import java.awt.*;
 import javax.swing.*;
@@ -10,8 +10,8 @@ import javax.swing.*;
 /**
  * @author astar
  */
-public class GothorWeb extends JFrame {
-    public GothorWeb() {
+public class DeepSeekDialogue extends JFrame {
+    public DeepSeekDialogue() {
         initComponents();
     }
 

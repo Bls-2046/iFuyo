@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Tue Mar 04 23:23:34 CST 2025
  */
 
-package com.github.ifuyo.apps.schedule.ui;
+package com.github.ifuyo.apps.navigation.schedule.ui;
 
 import java.awt.*;
 import javax.swing.*;

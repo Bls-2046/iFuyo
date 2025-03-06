@@ -2,6 +2,7 @@ package com.github.ifuyo.apps;
 
 import com.github.ifuyo.utils.requests.Https;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -246,6 +247,7 @@ public class Api {
         }
     }
 
+    @Nullable
     public static VerseV2Response getVerseV2() {
         String token;
         try {

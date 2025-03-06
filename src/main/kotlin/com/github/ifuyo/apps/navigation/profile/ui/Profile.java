@@ -2,7 +2,7 @@
  * Created by JFormDesigner on Mon Mar 03 21:03:50 CST 2025
  */
 
-package com.github.ifuyo.apps.profile.ui;
+package com.github.ifuyo.apps.navigation.profile.ui;
 
 import org.json.JSONObject;
 
