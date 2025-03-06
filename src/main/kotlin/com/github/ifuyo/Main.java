@@ -1,7 +1,7 @@
 package com.github.ifuyo;
 
 import com.github.ifuyo.apps.login.LoginController;
-import com.github.ifuyo.apps.login.ui.LoginView;
+import com.github.ifuyo.apps.login.LoginView;
 import com.github.ifuyo.apps.login.LoginModel;
 
 public class Main {

@@ -1,39 +1,28 @@
 package com.github.ifuyo.apps.login;
 
-import com.github.ifuyo.apps.login.ui.LoginView;
 import com.github.ifuyo.apps.navigation.profile.ui.Profile;
+import lombok.Getter;
 import org.json.JSONObject;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-
-public class LoginController implements ActionListener {
-    private LoginView view;
-    private LoginModel model;
+public class LoginController {
+    @Getter
+    private final LoginView view;
+    private final LoginModel model;
 
     public LoginController(LoginView view, LoginModel model) {
         this.view = view;
         this.model = model;
-        this.view.setVerse(model.getVerse());
-        this.view.setAuthor(model.getAuthor());
 
         // 绑定监听器
-        view.LoginListener(this);
+        view.getLoginButton().addActionListener(e -> handleLogin());
+        view.getExitProgramButton().addActionListener(e -> handleExit());
     }
 
-    public LoginView getView() {
-        return view;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // 保存按钮的原始文本
-        String originalButtonText = view.getLoginButtonText();
-
+    private void handleLogin() {
         // 设置按钮为加载状态
-        view.setLoginButtonText("登录中...");
-        view.setLoginButtonEnabled(false);
+//        view.setLoginButtonText("登录中...");
+//        view.setLoginButtonEnabled(false);
 
         // 启动一个新线程执行耗时操作，避免阻塞 UI 线程
         new Thread(() -> {
@@ -72,11 +61,15 @@ public class LoginController implements ActionListener {
             } finally {
                 // 恢复按钮的原始状态
                 SwingUtilities.invokeLater(() -> {
-                    view.setLoginButtonText(originalButtonText);
-                    view.setLoginButtonEnabled(true);
+//                    view.setLoginButtonText(originalButtonText);
+//                    view.setLoginButtonEnabled(true);
                     view.clearInputs();
                 });
             }
         }).start(); // 启动线程
+    }
+
+    private void handleExit() {
+        System.exit(0);
     }
 }
