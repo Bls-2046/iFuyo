@@ -7,24 +7,26 @@
 三、与 DeepSeek 对话；
 四、上传网页图标和 url 快速访问网页；
 
-# 使用说明⭐
+# 使用说明
 
-```maven
-https://github.com/Bls-2046/iFuyo.git
+```
+git clone https://github.com/Bls-2046/iFuyo.git
 ```
 
 ```maven
+// maven 依赖项
 nvm install clean
 ```
 
-```python
-# 创建虚拟环境(略)
+python 版本: 3.13.2 ( https://www.python.org/downloads/release/python-3132/ )
 
+创建虚拟环境 ( 虚拟环境创建参考教程: https://blog.csdn.net/qq_42951560/article/details/124224972 )
+```
 # 激活虚拟环境
 .venv\Scripts\activate
+```
 
-# 安装依赖
+```
+# 安装 python 依赖
 pip install -r requirements.txt
 ```
-[虚拟环境创建参考教程](https://blog.csdn.net/qq_42951560/article/details/124224972)
-# 开吃✅
