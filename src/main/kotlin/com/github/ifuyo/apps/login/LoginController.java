@@ -105,7 +105,7 @@ public class LoginController {
                 // 登录成功，显示消息并跳转到菜单界面
                 try {
                     model.saveCredentials(username, password);
-                    System.out.println("已创建文件");
+                    // System.out.println("已创建文件");
                     SwingUtilities.invokeLater(() -> {
                         view.dispose();
                         new Profile(jsonResponse).setVisible(true);
