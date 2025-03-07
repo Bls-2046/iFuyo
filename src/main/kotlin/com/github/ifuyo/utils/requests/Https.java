@@ -2,7 +2,7 @@ package com.github.ifuyo.utils.requests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.ifuyo.error.ExceptionHandler;
+import com.github.ifuyo.error.http.HttpsRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +28,9 @@ public class Https {
      * @return 返回指定类型的对象，如果发生异常则返回 null
      */
     public static <T> T get(final String url, TypeReference<T> typeRef) {
-        return ExceptionHandler.handle(() -> {
+        try {
             // 校验 URL 合法性
             validateUrl(url);
-
-            // 最终发起请求的 url
 
             // 创建 HTTP 连接
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -57,9 +55,17 @@ public class Https {
                 // 处理非 200 响应码
                 String errorMessage = "HTTP Request Failed. URL: " + url + ", Response Code: " + responseCode;
                 logger.error(errorMessage);
-                throw new HttpRequestException(errorMessage, responseCode);
+                throw new HttpsRequestException(errorMessage, responseCode, HttpsRequestException.ErrorType.CONNECTION_ERROR);
             }
-        }, "HTTP Request Failed");
+        } catch (MalformedURLException e) {
+            String errorMessage = "Invalid URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        } catch (Exception e) {
+            String errorMessage = "HTTP Request Failed. URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        }
     }
 
     /**
@@ -72,7 +78,7 @@ public class Https {
      * @return 返回指定类型的对象，如果发生异常则返回 null
      */
     public static <T> T get(final String url, Map<String, String> params, Map<String, String> headers, TypeReference<T> typeRef) {
-        return ExceptionHandler.handle(() -> {
+        try {
             // 校验 URL 合法性
             validateUrl(url);
 
@@ -114,9 +120,17 @@ public class Https {
                 // 处理非 200 响应码
                 String errorMessage = "HTTP Request Failed. URL: " + requestUrl + ", Response Code: " + responseCode;
                 logger.error(errorMessage);
-                throw new HttpRequestException(errorMessage, responseCode);
+                throw new HttpsRequestException(errorMessage, responseCode, HttpsRequestException.ErrorType.CONNECTION_ERROR);
             }
-        }, "HTTP Request Failed");
+        } catch (MalformedURLException e) {
+            String errorMessage = "Invalid URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        } catch (Exception e) {
+            String errorMessage = "HTTP Request Failed. URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        }
     }
 
     /**
@@ -153,26 +167,5 @@ public class Https {
      */
     private static void validateUrl(String url) throws MalformedURLException {
         new URL(url); // 如果 URL 不合法，会抛出 MalformedURLException
-    }
-
-    /**
-     * 自定义 HTTP 请求异常
-     */
-    public static class HttpRequestException extends Exception {
-        private final int statusCode;
-
-        public HttpRequestException(String message, int statusCode) {
-            super(message);
-            this.statusCode = statusCode;
-        }
-
-        public HttpRequestException(String message, int statusCode, Throwable cause) {
-            super(message, cause);
-            this.statusCode = statusCode;
-        }
-
-        public int getStatusCode() {
-            return statusCode;
-        }
     }
 }

@@ -3,8 +3,9 @@ package com.github.ifuyo.apps.login;
 import com.github.ifuyo.entity.LoginEntity;
 import com.github.ifuyo.utils.layouts.RUILogin;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +31,6 @@ public class LoginView extends JFrame {
         setBackground(new Color(0, 0, 0, 0));
 
         // JLayeredPane
-
         JLayeredPane lp = getLayeredPane();
 
         // 添加内容面板 (BaseFrame)
@@ -66,7 +66,14 @@ public class LoginView extends JFrame {
         lp.add(loginButton, JLayeredPane.PALETTE_LAYER);
         lp.add(exitProgramButton, JLayeredPane.PALETTE_LAYER);
 
-        loginEntity = new LoginEntity(usernameInput, passwordInput, loginButton, exitProgramButton);
+        RUILogin errorFrame = new RUILogin("login","notifyFrameError.png");
+        JLabel[] errorFrameDisp = errorFrame.errorLabel(550,40,"Test",Color.WHITE,14,"微软雅黑");
+        lp.add(errorFrameDisp[0], JLayeredPane.PALETTE_LAYER);
+        lp.add(errorFrameDisp[1], JLayeredPane.POPUP_LAYER);
+        errorFrameDisp[0].setVisible(false);
+        errorFrameDisp[1].setVisible(false);
+
+        loginEntity = new LoginEntity(usernameInput, passwordInput, loginButton, exitProgramButton, errorFrameDisp);
     }
 
     public String getUsername() {
@@ -85,18 +92,30 @@ public class LoginView extends JFrame {
         return loginEntity.getExitProgramButtonObject();
     }
 
-    // 显示消息
-    public void showMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
+    // 错误消息提示
+    public void showErrorFrame(String message) {
+        // 替换文本有问题
+        JLabel errorFrameTarget = loginEntity.getErrorFrameDisp()[0];
+        JLabel messageTarget = loginEntity.getErrorFrameDisp()[1];
+        messageTarget.setText(message);
+        errorFrameTarget.setVisible(true);
+        messageTarget.setVisible(true);
     }
 
-    // 显示错误消息
-    public void showError(String message) {
-        JOptionPane.showMessageDialog(this, message, "错误", JOptionPane.ERROR_MESSAGE);
+    public JTextField getUsernameInput() {
+        return loginEntity.getUsernameObject();
+    }
+
+    public JPasswordField getPasswordInput() {
+        return loginEntity.getPasswordObject();
     }
 
     public void clearInputs() {
         loginEntity.getUsernameObject().setText("");
         loginEntity.getPasswordObject().setText("");
+    }
+
+    public void setLoginButtonEnabled(boolean statusButton) {
+        loginEntity.getLoginButtonObject().setEnabled(statusButton);
     }
 }

@@ -6,6 +6,8 @@
 四、如果登录失败返回状态码给 Java， 并让用户重新填写信息，若成功登录获得 Ticket 和 Cookie 重定向到个人门户管理中心
 四、抓包获得学生信息, 并返回给 Java
 """
+import threading
+
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.edge.service import Service
@@ -15,7 +17,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from PIL import Image, ImageFilter, ImageEnhance
 import requests
-import urllib3
 import easyocr
 import time
 import os
@@ -24,7 +25,6 @@ import json
 import io
 import certifi
 from requests.adapters import HTTPAdapter
-from urllib3.poolmanager import PoolManager
 import ssl
 
 # 配置参数
@@ -244,7 +244,7 @@ def login_bitzh(username, password, headless=False):
 
                         # 提交登录
                         driver.find_element(By.ID, 'submit1').click()
-                        time.sleep(0.5)
+                        time.sleep(0.02)
 
                         # ===== 错误检测开始 =====
                         error_message = None  # 初始化错误信息变量
@@ -265,18 +265,6 @@ def login_bitzh(username, password, headless=False):
                                         break  # 找到第一个可见的错误信息后退出
                             except NoSuchElementException:
                                 # 5. 如果找不到 errors 元素，忽略错误
-                                pass
-
-                            try:
-                                # 6. 检测 `login-freeze` 元素
-                                freeze_error = driver.find_element(By.ID, 'login-freeze')
-
-                                # 7. 检查 `login-freeze` 元素是否可见
-                                if driver.execute_script("return arguments[0].style.display !== 'none'", freeze_error):
-                                    # 8. 如果可见，提取错误信息
-                                    error_message = freeze_error.text.strip()
-                            except NoSuchElementException:
-                                # 9. 如果找不到 `login-freeze` 元素，忽略错误
                                 pass
 
                         # 错误处理
@@ -300,7 +288,7 @@ def login_bitzh(username, password, headless=False):
                         break
 
                 elif 'manage/index' in current_url:
-                    time.sleep(3)
+                    time.sleep(1)
                     # 获取学生信息
                     student_info = get_student_info(driver)
                     # 返回结果
@@ -312,30 +300,6 @@ def login_bitzh(username, password, headless=False):
                 else:
                     result['message'] = '登录异常'
                     break
-
-                # ==== 错误检测开始 ====
-                error_msg = None  # 初始化错误信息变量
-
-                # 1. 检测隐藏错误（冻结/凭证错误）
-                try:
-                    login_error = driver.find_element(By.ID, 'login-error')
-                    if driver.execute_script("return arguments[0].style.display !== 'none'", login_error):
-                        error_msg = login_error.text.strip()
-                except NoSuchElementException:
-                    pass
-
-                try:
-                    freeze_error = driver.find_element(By.ID, 'login-freeze')
-                    if driver.execute_script("return arguments[0].style.display !== 'none'", freeze_error):
-                        error_msg = freeze_error.text.strip()
-                except NoSuchElementException:
-                    pass
-
-                # 错误处理
-                if error_msg:
-                    result['message'] = error_msg
-                    return result  # 直接返回错误
-                # ===== 错误检测结束 =====
             # ===== while 识别验证码 + 重定向 =======
         # ===== for 尝试登录 =====
 
@@ -352,39 +316,48 @@ def login_bitzh(username, password, headless=False):
             driver.quit()
 # endregion ===== 登录结束 =====
 
+def check_username(event):
+    result = is_correct_username(username)
+    if result:
+        print(json.dumps(result, ensure_ascii=False))
+        # event.set();
+    # 任务完成后，设置事件
+    event.set()
+
+def login(event):
+    # 等待事件被设置（即 check_username 完成）
+    event.wait()
+    result = login_bitzh(username, password, headless=False)
+    print(json.dumps(result, ensure_ascii=False))
+
 if __name__ == "__main__":
-    # result = {
-    #     'message': "test",
-    #     'data': {
-    #         'test': 'test'
-    #     }
-    # }
-    # print(json.dumps(result, ensure_ascii=False))
-
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-
     try:
-        if len(sys.argv) != 3:
-            print(json.dumps({"message": "参数数量不正确", "data": None}))
-            sys.exit(1)
-
         username = sys.argv[1]
         password = sys.argv[2]
 
-        if not username or not password:
-            print(json.dumps({"message": "用户名或密码不能为空", "data": None}))
-            sys.exit(1)
+        # 创建一个事件对象
+        event = threading.Event()
 
-    # username = "23002110"
-    # password = "CSX2046108341"
+        # 创建并启动线程
+        username_check_thread = threading.Thread(target=check_username, args=(event,))
+        login_thread = threading.Thread(target=login, args=(event,))
 
-        result = is_correct_username(username)
-        if result:
-            print(json.dumps(result, ensure_ascii=False))
-            exit(1)
+        username_check_thread.start()
+        login_thread.start()
 
-        result = login_bitzh(username, password, headless=False)
-        print(json.dumps(result, ensure_ascii=False))  # 确保输出单行 JSON
+        # 等待两个线程完成
+        username_check_thread.join()
+        login_thread.join()
+
+        #
+        # result = is_correct_username(username)
+        # if result:
+        #     print(json.dumps(result, ensure_ascii=False))
+        #     exit(1)
+        #
+        # result = login_bitzh(username, password, headless=False)
+        # print(json.dumps(result, ensure_ascii=False))  # 确保输出单行 JSON
 
     except Exception as e:
         print(json.dumps({"message": f"程序异常错误: {str(e)}", "data": None}))

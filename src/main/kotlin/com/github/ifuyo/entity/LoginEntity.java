@@ -15,5 +15,5 @@ public class LoginEntity {
     private JPasswordField passwordObject;
     private JButton loginButtonObject;
     private JButton exitProgramButtonObject;
-
+    private JLabel[] errorFrameDisp;
 }

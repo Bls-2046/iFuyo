@@ -95,5 +95,24 @@ public class RUILogin extends JFrame {
         return button;
     }
 
+    public JLabel[] errorLabel(int posX, int posY, String message, Color color, int fontSize, String fontFamily) {
+        ImageIcon icon = new ImageIcon(
+                Objects.requireNonNull(getClass().getClassLoader().getResource(String.format("images/layouts/%s/%s", fileType, fileName)))
+        );
 
+        JLabel label = new JLabel(icon);
+        label.setOpaque(false);
+        label.setBounds(posX, posY, icon.getIconWidth(), icon.getIconHeight());
+        label.setBackground(new Color(0,0,0,0));
+        label.setBorder(BorderFactory.createEmptyBorder());
+
+        JLabel text = new JLabel();
+        text.setBounds(posX, posY-4, icon.getIconWidth(), icon.getIconHeight()); // Y-2 = OFFSET FIX
+        text.setForeground(color);
+        text.setFont(new Font(fontFamily, Font.BOLD, fontSize));
+        text.setHorizontalAlignment(JLabel.CENTER);
+        text.setText(message);
+
+        return new JLabel[]{label, text};
+    }
 }
