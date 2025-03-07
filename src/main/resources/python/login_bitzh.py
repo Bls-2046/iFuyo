@@ -33,16 +33,6 @@ edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
 reader = easyocr.Reader(['en']) # 初始化 EasyOCR 阅读器（支持英文）
 max_retries = 100 # 尝试登录的最大次数
 
-"""======================================================"""
-# region 启用调试日志
-# http.client.HTTPConnection.debuglevel = 1
-# logging.basicConfig()
-# logging.getLogger().setLevel(logging.DEBUG)
-# requests_log = logging.getLogger("requests.packages.urllib3")
-# requests_log.setLevel(logging.DEBUG)
-# requests_log.propagate = True
-# endregion
-
 # 自定义 HTTPAdapter，强制使用 TLSv1.2 并降低安全级别
 class TLSAdapter(HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
