@@ -26,7 +26,7 @@ nvm install clean
 
 python 版本: 3.13.2 ( https://www.python.org/downloads/release/python-3132/ )
 
-创建虚拟环境 ( [不会的点这里, 一般 IDE 就有]([https://blog.csdn.net/qq_42951560/article/details/124224972](https://cn.bing.com/search?pglt=299&q=python+%E6%80%8E%E4%B9%88%E6%BF%80%E6%B4%BB%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83&cvid=121bab3845704bc5b16791d2742f0103&gs_lcrp=EgRlZGdlKgYIABBFGDkyBggAEEUYOTIGCAEQABhAMgYIAhAAGEAyBggDEAAYQDIGCAQQABhAMgYIBRAAGEAyBggGEAAYQDIGCAcQABhAMgYICBAAGEDSAQg4NzQwajBqMagCCLACAQ&FORM=BESBTB&adppc=EDGEESS&PC=EDGEESS&ensearch=1)) )
+创建虚拟环境 ( [不会的点这里, 一般 IDE 就有](https://cn.bing.com/search?pglt=299&q=python+%E6%80%8E%E4%B9%88%E6%BF%80%E6%B4%BB%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83&cvid=121bab3845704bc5b16791d2742f0103&gs_lcrp=EgRlZGdlKgYIABBFGDkyBggAEEUYOTIGCAEQABhAMgYIAhAAGEAyBggDEAAYQDIGCAQQABhAMgYIBRAAGEAyBggGEAAYQDIGCAcQABhAMgYICBAAGEDSAQg4NzQwajBqMagCCLACAQ&FORM=BESBTB&adppc=EDGEESS&PC=EDGEESS&ensearch=1) )
 ```
 # 激活虚拟环境
 .venv\Scripts\activate
