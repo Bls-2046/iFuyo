@@ -1,5 +1,6 @@
 package com.github.ifuyo.apps.login;
 
+import com.github.ifuyo.config.Settings;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,6 +33,7 @@ public class LoginModel {
             String scriptPath = "src/main/resources/python/login_bitzh.py";
 
             // 启动 Python 进程
+            System.out.println(scriptPath);
             Process process = Runtime.getRuntime().exec(new String[]{pythonInterpreter, scriptPath, username, password});
 
             // 读取 Python 脚本的标准输出
@@ -44,7 +46,6 @@ public class LoginModel {
             }
             String result = output.toString();
             System.out.println("Raw Python Output: " + result);
-
             // 解析 JSON 响应
             return new JSONObject(result);
         } catch (Exception ex) {

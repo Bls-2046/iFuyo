@@ -27,6 +27,19 @@ import certifi
 from requests.adapters import HTTPAdapter
 import ssl
 
+from datetime import datetime
+# 日志文件路径
+LOG_FILE_PATH = "logs/script_log.txt"
+# 确保日志目录存在
+log_dir = os.path.dirname(LOG_FILE_PATH)
+def log_to_file(message):
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    """将日志信息以 UTF-8 编码写入文件"""
+    with open(LOG_FILE_PATH, "a", encoding="utf-8") as log_file:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        log_file.write(f"[{timestamp}] {message}\n")
+
 # 配置参数
 os.environ["CUDA_VISIBLE_DEVICES"] = "" # 禁用 GPU
 edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
@@ -118,7 +131,6 @@ def process_captcha(image_path):
     enhancer = ImageEnhance.Contrast(image) # 增强对比度
     image = enhancer.enhance(2.0)
 
-
     processed_image_path = "src/main/resources/python/processed_captcha.png"
     # 创建目录（如果不存在）
     os.makedirs(os.path.dirname(processed_image_path), exist_ok=True)
@@ -157,11 +169,14 @@ def get_student_info(driver):
     info = {}
 
     try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'div[style*="float:left;width:300px;"]'))
+        )
         # 定位包含学生信息的 div 元素
-        info_div = driver.find_element(By.CSS_SELECTOR, 'div[style*="float:left;width:300px;"]')
+        base_info_div = driver.find_element(By.CSS_SELECTOR, 'div[style*="float:left;width:300px;"]')
 
         # 获取 div 的文本内容
-        text = info_div.text
+        text = base_info_div.text
 
         # 按行分割文本
         lines = text.split('\n')
@@ -177,6 +192,43 @@ def get_student_info(driver):
 
     return info
 # endregion
+
+# region # 获取课表信息
+def get_course_schedule(driver):
+    """
+    从网页中提取课表信息。
+
+    :param driver: 已初始化的 Selenium WebDriver 对象
+    :return: 包含课表信息的列表，每个元素为一个字典，表示一天的课程
+    """
+    # 等待表格内容完全加载
+    # 获取表格元素
+    table_element = driver.find_element(By.ID, "datatable")
+    rows = table_element.find_elements(By.TAG_NAME, "tr")
+    # 提取表头（星期几）
+    headers = [header.text for header in rows[0].find_elements(By.TAG_NAME, "td")]
+    # 提取课程信息
+    course_schedule = []
+    for row in rows[1:]:
+        # 获取每一行的所有单元格
+        cells = row.find_elements(By.TAG_NAME, "td")
+        if not cells:
+            continue
+        # 获取时间段（第一列）
+        time_slot = cells[0].text
+        # 获取每天的课程信息
+        for i in range(1, len(cells)):
+            day = headers[i]  # 星期几
+            course_info = cells[i].text  # 课程信息
+            # 如果课程信息不为空，添加到课表中
+            if course_info.strip():
+                course_schedule.append({
+                    "time_slot": time_slot,  # 时间段
+                    "day": day,  # 星期几
+                    "course_info": course_info  # 课程信息
+                })
+    return course_schedule
+#endregion
 
 # region ===== 开始登录 =====
 def login_bitzh(username, password, headless=False):
@@ -199,18 +251,16 @@ def login_bitzh(username, password, headless=False):
     service = Service(edge_driver_path)
     driver = webdriver.Edge(service=service, options=edge_options)
 
+    log_to_file("浏览器启动完成")
     # 开始尝试登录
     try:
         for attempt in range(max_retries):
-
             # 直接访问目标系统触发认证流程
             driver.get('https://s.bitzh.edu.cn/manage/index')
-
             # 自动处理重定向链
             redirect_count = 0
             while True:
                 current_url = driver.current_url
-
                 # 检测是否进入CAS登录页
                 if 'cas.bitzh.edu.cn/cas3/login' in current_url:
                     # 填写登录表单
@@ -220,9 +270,9 @@ def login_bitzh(username, password, headless=False):
                         ).send_keys(username)
 
                         driver.find_element(By.ID, 'password').send_keys(password)
-
                         # 验证码处理（带重试）
                         for _ in range(3):
+                            log_to_file(_)
                             captcha_text = retry_captcha(driver)
 
                             # print("识别验证码为：", captcha_text)
@@ -234,8 +284,9 @@ def login_bitzh(username, password, headless=False):
 
                         # 提交登录
                         driver.find_element(By.ID, 'submit1').click()
-                        time.sleep(0.02)
+                        time.sleep(0.0002)
 
+                        log_to_file("错误检测开始")
                         # ===== 错误检测开始 =====
                         error_message = None  # 初始化错误信息变量
 
@@ -278,13 +329,28 @@ def login_bitzh(username, password, headless=False):
                         break
 
                 elif 'manage/index' in current_url:
-                    time.sleep(1)
-                    # 获取学生信息
-                    student_info = get_student_info(driver)
-                    # 返回结果
-                    result['message'] = '登录成功'
-                    result['data'] = student_info
-                    return result
+                    start_time = time.time()
+                    while True:
+                    # 检查页面是否加载完成
+                        if driver.execute_script("return document.readyState") == "complete":
+                            is_request_complete = driver.execute_script("""
+                                return window.performance.getEntries().some(entry => {
+                                    return entry.name === 'https://s.bitzh.edu.cn/manage/protal/gettabletime' &&
+                                           entry.responseStatus === 200;
+                                });
+                            """)
+                            if is_request_complete:
+                                student_info = get_student_info(driver)
+                                course_schedule = get_course_schedule(driver)
+                                result['message'] = '登录成功'
+                                result['data'] = student_info
+                                result["data"]["课表"] = course_schedule
+                                log_to_file("Over")
+                                return result
+                        if time.time() - start_time > 30:
+                            result['message'] = "运行超时"
+                            return result
+                        time.sleep(0.5)
 
                 # 其他情况处理
                 else:
@@ -306,48 +372,40 @@ def login_bitzh(username, password, headless=False):
             driver.quit()
 # endregion ===== 登录结束 =====
 
-def check_username(event):
+def check_username():
     result = is_correct_username(username)
     if result:
         print(json.dumps(result, ensure_ascii=False))
-        # event.set();
-    # 任务完成后，设置事件
-    event.set()
+        return True
 
-def login(event):
+def login():
     # 等待事件被设置（即 check_username 完成）
-    event.wait()
     result = login_bitzh(username, password, headless=False)
     print(json.dumps(result, ensure_ascii=False))
 
 if __name__ == "__main__":
+    log_to_file("脚本启动")
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    # while True:  # 保持脚本运行
     try:
         username = sys.argv[1]
         password = sys.argv[2]
-
-        # 创建一个事件对象
-        event = threading.Event()
-
-        # 创建并启动线程
-        username_check_thread = threading.Thread(target=check_username, args=(event,))
-        login_thread = threading.Thread(target=login, args=(event,))
-
-        username_check_thread.start()
-        login_thread.start()
-
-        # 等待两个线程完成
-        username_check_thread.join()
-        login_thread.join()
-
+        # # 创建并启动线程
+        # username_check_thread = threading.Thread(target=check_username, args=())
+        # login_thread = threading.Thread(target=login, args=())
         #
-        # result = is_correct_username(username)
-        # if result:
-        #     print(json.dumps(result, ensure_ascii=False))
-        #     exit(1)
+        # username_check_thread.start()
+        # login_thread.start()
         #
-        # result = login_bitzh(username, password, headless=False)
-        # print(json.dumps(result, ensure_ascii=False))  # 确保输出单行 JSON
+        # # 等待两个线程完成
+        # username_check_thread.join()
+        # login_thread.join()
+        if check_username():
+            exit(1)
+
+        result = login_bitzh(username, password, headless=False)
+        print(json.dumps(result, ensure_ascii=False))
 
     except Exception as e:
         print(json.dumps({"message": f"程序异常错误: {str(e)}", "data": None}))
+        sys.stdout.flush()

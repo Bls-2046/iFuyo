@@ -11,14 +11,22 @@ import java.util.Map;
 import java.util.List;
 import java.io.IOException;
 
+/**
+ *  请求返回必须为 JSON, 否则反序列化会失败
+ */
+
 public class Api {
+
+    // ===================================一言 API, 获取古诗句 =============================================
+
+    // ================= v1 版本 =================
+    // 支持部分自定义
     @Setter
     @Getter
     public static class TokenResponse {
         // Getters and setters
         private String status;
         private String data;
-
     }
 
     public static TokenResponse getToken() throws IOException {
@@ -40,6 +48,7 @@ public class Api {
         return Https.get("https://v1.jinrishici.com/all.json", new TypeReference<VerseV1Response>() {});
     }
 
+    // ================= v2 版本 =================
     @Setter
     @Getter
     public static class VerseV2Response {
@@ -92,5 +101,11 @@ public class Api {
         Map<String, String> headers = new HashMap<>();
         headers.put("X-User-Token", token); // 添加 Token 到请求头
         return Https.get("https://v2.jinrishici.com/sentence", null, headers, new TypeReference<VerseV2Response>() {});
+    }
+    // ===================================一言 API, 获取古诗句 =============================================
+
+
+    public static void GetPersonalInfo() {
+
     }
 }

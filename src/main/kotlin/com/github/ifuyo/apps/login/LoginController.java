@@ -26,6 +26,7 @@ public class LoginController {
         // 判断是否自动登录
         Path path = Paths.get(FILE_PATH);
         if (Files.exists(path)) {
+            System.out.println("File exists!");
             autoLogin();
         }
     }
@@ -48,7 +49,6 @@ public class LoginController {
                 }
                 // 调用 Model 的验证逻辑
                 isValidateLogin(username, password);
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -69,8 +69,6 @@ public class LoginController {
                     model.deleteCredentials();
                     return;
                 }
-
-                // 调用 Model 的验证逻辑
                 isValidateLogin(username, password);
             } catch (Exception ex) {
                 ex.printStackTrace();
