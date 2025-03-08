@@ -42,3 +42,4 @@ build/
 
 # 保留 .env.template 文件
 !.env.template
+/logs
