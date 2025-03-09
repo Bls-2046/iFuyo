@@ -7,6 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Settings {
     // 私有构造函数，防止外部实例化
@@ -18,7 +20,7 @@ public class Settings {
         // 初始化文件
         globalTheme();
 
-         // startPythonProcess();
+        startPythonProcess(".venv\\Scripts\\python.exe", "src/main/resources/python/login_bitzh.py");
     }
     // 应用主题
     private static void globalTheme() {
@@ -49,37 +51,66 @@ public class Settings {
     private static Process pythonProcess;
     private static BufferedWriter writer;
     private static BufferedReader reader;
+    private static boolean isPythonProcessRunning = false;
 
     // 启动 Python 进程（预加载）
-    private static void startPythonProcess() throws IOException {
-        String pythonInterpreter = ".venv\\Scripts\\python.exe";
-        String scriptPath = "src/main/resources/python/login_bitzh.py";
-        pythonProcess = Runtime.getRuntime().exec(new String[]{pythonInterpreter, scriptPath});
-        System.out.println("Python process started");
+    private static void startPythonProcess(String pythonInterpreter, String scriptPath) throws IOException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            try {
+                pythonProcess = Runtime.getRuntime().exec(new String[]{pythonInterpreter, scriptPath});
 
-        // 获取进程的输入输出流
-        writer = new BufferedWriter(new OutputStreamWriter(pythonProcess.getOutputStream(), StandardCharsets.UTF_8));
-        reader = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(), StandardCharsets.UTF_8));
+                // 获取 Python 脚本的输出流（用于向脚本传递数据）
+                writer = new BufferedWriter(new OutputStreamWriter(pythonProcess.getOutputStream(), StandardCharsets.UTF_8));
+                // 获取 Python 脚本的输入流（用于读取脚本的输出）
+                reader = new BufferedReader(new InputStreamReader(pythonProcess.getInputStream(), StandardCharsets.UTF_8));
+
+                isPythonProcessRunning = true;
+                System.out.println("Python 进程已启动");
+            } catch (IOException e) {
+                e.printStackTrace();
+                isPythonProcessRunning = false;
+            }
+        });
+        executor.shutdown();
     }
 
-    // 向 Python 进程发送数据并获取结果
+    /**
+     * 执行 Python 脚本并返回输出结果
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return Python 脚本的输出结果
+     * @throws IOException 如果发生 I/O 错误
+     */
     public static String executePythonScript(String username, String password) throws IOException {
+        while (true) {
+            if (isPythonProcessRunning) {
+                break;
+            }
+        }
         // 构造输入数据
-        String input = String.format("{\"username\": \"%s\", \"password\": \"%s\"}", username, password);
-        System.out.println("Executing python script: " + input);
-        // 发送输入数据
-        writer.write(input + "\n");
+        writer.write(username + "\n");
+        writer.write(password + "\n");
         writer.flush();
 
-        // 读取 Python 进程的输出
+        // 读取 Python 进程的输出（仅一行）
         return reader.readLine();
     }
 
     // 停止 Python 进程
-    public static void stopPythonProcess() throws IOException {
+    public static void stopPythonProcess() {
         try {
-            pythonProcess.destroy();
-        } catch (Exception e) {
+            if (writer != null) {
+                writer.close();
+            }
+            if (reader != null) {
+                reader.close();
+            }
+            if (pythonProcess != null) {
+                pythonProcess.destroy();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

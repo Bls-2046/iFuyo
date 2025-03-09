@@ -13,6 +13,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
+import java.util.Map;
 import java.util.Map;
 
 public class Https {
@@ -20,6 +24,7 @@ public class Https {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(Https.class);
 
+    // ======================================================= Get 请求 =======================================================================
     /**
      * 发送 GET 请求并返回指定类型的对象（支持无参请求）
      *
@@ -132,6 +137,76 @@ public class Https {
             throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
         }
     }
+    // ======================================================= Get 请求 =======================================================================
+
+
+    // ======================================================= Post 请求 ======================================================================
+    /**
+     * 发送 POST 请求并返回指定类型的对象
+     *
+     * @param url     请求 URL（需要包含协议，如 "https://"）
+     * @param body    请求体（如 JSON 或表单数据）
+     * @param headers 请求头（可选，格式为 {"Header1": "Value1", "Header2": "Value2"}）
+     * @param typeRef 类型引用（用于显式指定泛型类型）
+     * @return 返回指定类型的对象，如果发生异常则返回 null
+     */
+    public static <T> T post(final String url, String body, Map<String, String> headers, TypeReference<T> typeRef) {
+        try {
+            // 校验 URL 合法性
+            validateUrl(url);
+
+            // 创建 HTTP 连接
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(5000); // 5 秒连接超时
+            connection.setReadTimeout(10000);   // 10 秒读取超时
+            connection.setDoOutput(true);       // 允许写入请求体
+
+            // 设置请求头
+            if (headers != null) {
+                for (Map.Entry<String, String> entry : headers.entrySet()) {
+                    connection.setRequestProperty(entry.getKey(), entry.getValue());
+                }
+            }
+
+            // 写入请求体
+            try (OutputStream os = connection.getOutputStream();
+                 OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
+                writer.write(body);
+                writer.flush();
+            }
+
+            // 发送请求并获取响应
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) { // 200
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    // 将 JSON 响应解析为指定类型的对象
+                    return objectMapper.readValue(response.toString(), typeRef);
+                }
+            } else {
+                // 处理非 200 响应码
+                String errorMessage = "HTTP POST Request Failed. URL: " + url + ", Response Code: " + responseCode;
+                logger.error(errorMessage);
+                throw new HttpsRequestException(errorMessage, responseCode, HttpsRequestException.ErrorType.CONNECTION_ERROR);
+            }
+        } catch (MalformedURLException e) {
+            String errorMessage = "Invalid URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        } catch (Exception e) {
+            String errorMessage = "HTTP POST Request Failed. URL: " + url;
+            logger.error(errorMessage, e);
+            throw new HttpsRequestException(errorMessage, 0, HttpsRequestException.ErrorType.OTHER_ERROR, e);
+        }
+    }
+    // ======================================================= Post 请求 =======================================================================
+
 
     /**
      * 将查询参数拼接到 URL 中

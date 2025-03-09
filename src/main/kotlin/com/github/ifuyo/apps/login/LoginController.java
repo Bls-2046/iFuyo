@@ -1,6 +1,8 @@
 package com.github.ifuyo.apps.login;
 
 import com.github.ifuyo.apps.navigation.profile.ui.Profile;
+import com.github.ifuyo.entity.StudentEntity;
+import lombok.Data;
 import lombok.Getter;
 import org.json.JSONObject;
 import javax.swing.*;
@@ -22,7 +24,6 @@ public class LoginController {
         // 绑定监听器
         view.getLoginButton().addActionListener(e -> handleLogin());
         view.getExitProgramButton().addActionListener(e -> handleExit());
-
         // 判断是否自动登录
         Path path = Paths.get(FILE_PATH);
         if (Files.exists(path)) {
@@ -113,14 +114,12 @@ public class LoginController {
                 }
             } else {
                 // 登录失败，显示错误消息
-                SwingUtilities.invokeLater(() -> {
-                    try {
-                        model.deleteCredentials();
-                        view.showErrorFrame(message);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                try {
+                    model.deleteCredentials();
+                    view.showErrorFrame(message);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

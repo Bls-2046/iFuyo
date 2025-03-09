@@ -3,6 +3,8 @@ package com.github.ifuyo;
 import com.github.ifuyo.apps.login.LoginController;
 import com.github.ifuyo.apps.login.LoginView;
 import com.github.ifuyo.apps.login.LoginModel;
+import com.github.ifuyo.entity.StudentEntity;
+
 import static com.github.ifuyo.config.Settings.initApplication;
 
 public class Main {

@@ -40,6 +40,9 @@ def log_to_file(message):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_file.write(f"[{timestamp}] {message}\n")
 
+driver = None
+edge_options = None
+
 # 配置参数
 os.environ["CUDA_VISIBLE_DEVICES"] = "" # 禁用 GPU
 edge_driver_path = r'D:\edgedriver\msedgedriver.exe' # EdgeDriver 路径
@@ -193,63 +196,49 @@ def get_student_info(driver):
     return info
 # endregion
 
-# region # 获取课表信息
-def get_course_schedule(driver):
-    """
-    从网页中提取课表信息。
-
-    :param driver: 已初始化的 Selenium WebDriver 对象
-    :return: 包含课表信息的列表，每个元素为一个字典，表示一天的课程
-    """
-    # 等待表格内容完全加载
-    # 获取表格元素
-    table_element = driver.find_element(By.ID, "datatable")
-    rows = table_element.find_elements(By.TAG_NAME, "tr")
-    # 提取表头（星期几）
-    headers = [header.text for header in rows[0].find_elements(By.TAG_NAME, "td")]
-    # 提取课程信息
-    course_schedule = []
-    for row in rows[1:]:
-        # 获取每一行的所有单元格
-        cells = row.find_elements(By.TAG_NAME, "td")
-        if not cells:
-            continue
-        # 获取时间段（第一列）
-        time_slot = cells[0].text
-        # 获取每天的课程信息
-        for i in range(1, len(cells)):
-            day = headers[i]  # 星期几
-            course_info = cells[i].text  # 课程信息
-            # 如果课程信息不为空，添加到课表中
-            if course_info.strip():
-                course_schedule.append({
-                    "time_slot": time_slot,  # 时间段
-                    "day": day,  # 星期几
-                    "course_info": course_info  # 课程信息
-                })
-    return course_schedule
+# region # 获取课表信息 ( 已删 )
+# def get_course_schedule(driver):
+#     """
+#     从网页中提取课表信息。
+#
+#     :param driver: 已初始化的 Selenium WebDriver 对象
+#     :return: 包含课表信息的列表，每个元素为一个字典，表示一天的课程
+#     """
+#     # 等待表格内容完全加载
+#     # 获取表格元素
+#     table_element = driver.find_element(By.ID, "datatable")
+#     rows = table_element.find_elements(By.TAG_NAME, "tr")
+#     # 提取表头（星期几）
+#     headers = [header.text for header in rows[0].find_elements(By.TAG_NAME, "td")]
+#     # 提取课程信息
+#     course_schedule = []
+#     for row in rows[1:]:
+#         # 获取每一行的所有单元格
+#         cells = row.find_elements(By.TAG_NAME, "td")
+#         if not cells:
+#             continue
+#         # 获取时间段（第一列）
+#         time_slot = cells[0].text
+#         # 获取每天的课程信息
+#         for i in range(1, len(cells)):
+#             day = headers[i]  # 星期几
+#             course_info = cells[i].text  # 课程信息
+#             # 如果课程信息不为空，添加到课表中
+#             if course_info.strip():
+#                 course_schedule.append({
+#                     "time_slot": time_slot,  # 时间段
+#                     "day": day,  # 星期几
+#                     "course_info": course_info  # 课程信息
+#                 })
+#     return course_schedule
 #endregion
 
 # region ===== 开始登录 =====
-def login_bitzh(username, password, headless=False):
+def login_bitzh(username, password):
     result = {
         'message': '',
         'data': {}
-    } # 返回 Java 的结果( 包含登录状态和抓包数据 )
-
-    # region # 访问参数配置
-    edge_options = Options()
-    edge_options.add_argument("--disable-blink-features=AutomationControlled")
-    edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])  # 禁用日志
-    edge_options.add_argument("--log-level=3")  # 关闭所有日志（FATAL 级别）
-    edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-    # endregion
-
-    if headless:
-        edge_options.add_argument('--headless=new')
-
-    service = Service(edge_driver_path)
-    driver = webdriver.Edge(service=service, options=edge_options)
+    } # 返回 Java 的结果 ( 包含登录状态和抓包数据 )
 
     log_to_file("浏览器启动完成")
     # 开始尝试登录
@@ -258,7 +247,7 @@ def login_bitzh(username, password, headless=False):
             # 直接访问目标系统触发认证流程
             driver.get('https://s.bitzh.edu.cn/manage/index')
             # 自动处理重定向链
-            redirect_count = 0
+            # redirect_count = 0
             while True:
                 current_url = driver.current_url
                 # 检测是否进入CAS登录页
@@ -271,8 +260,7 @@ def login_bitzh(username, password, headless=False):
 
                         driver.find_element(By.ID, 'password').send_keys(password)
                         # 验证码处理（带重试）
-                        for _ in range(3):
-                            log_to_file(_)
+                        for _ in range(10):
                             captcha_text = retry_captcha(driver)
 
                             # print("识别验证码为：", captcha_text)
@@ -284,9 +272,10 @@ def login_bitzh(username, password, headless=False):
 
                         # 提交登录
                         driver.find_element(By.ID, 'submit1').click()
-                        time.sleep(0.0002)
+                        time.sleep(0.00002)
 
                         log_to_file("错误检测开始")
+
                         # ===== 错误检测开始 =====
                         error_message = None  # 初始化错误信息变量
 
@@ -300,6 +289,7 @@ def login_bitzh(username, password, headless=False):
                                     # 3. 检查元素是否可见
                                     if driver.execute_script("return arguments[0].style.display !== 'none'", error):
                                         # 4. 如果可见，提取错误信息
+                                        log_to_file(error.text.strip())
                                         if error.text.strip() == "图形验证码错误":
                                             continue
                                         error_message = error.text.strip()
@@ -307,7 +297,6 @@ def login_bitzh(username, password, headless=False):
                             except NoSuchElementException:
                                 # 5. 如果找不到 errors 元素，忽略错误
                                 pass
-
                         # 错误处理
                         if error_message:
                             result['message'] = error_message
@@ -319,14 +308,14 @@ def login_bitzh(username, password, headless=False):
                         break
 
                 # 检测Ticket重定向
-                elif 'ticket=' in current_url:
-                    print(f"处理Ticket重定向: {current_url.split('ticket=')[1][:15]}...")
-                    # 必须重新加载以完成验证
-                    driver.get(current_url)
-                    redirect_count += 1
-                    if redirect_count > 5:
-                        result['message'] = '登录异常'
-                        break
+                # elif 'ticket=' in current_url:
+                #     print(f"处理Ticket重定向: {current_url.split('ticket=')[1][:15]}...")
+                #     # 必须重新加载以完成验证
+                #     driver.get(current_url)
+                #     redirect_count += 1
+                #     if redirect_count > 5:
+                #         result['message'] = '登录异常'
+                #         break
 
                 elif 'manage/index' in current_url:
                     start_time = time.time()
@@ -341,10 +330,10 @@ def login_bitzh(username, password, headless=False):
                             """)
                             if is_request_complete:
                                 student_info = get_student_info(driver)
-                                course_schedule = get_course_schedule(driver)
+                                # course_schedule = get_course_schedule(driver)
                                 result['message'] = '登录成功'
                                 result['data'] = student_info
-                                result["data"]["课表"] = course_schedule
+                                # result["data"]["课表"] = course_schedule
                                 log_to_file("Over")
                                 return result
                         if time.time() - start_time > 30:
@@ -378,34 +367,28 @@ def check_username():
         print(json.dumps(result, ensure_ascii=False))
         return True
 
-def login():
-    # 等待事件被设置（即 check_username 完成）
-    result = login_bitzh(username, password, headless=False)
-    print(json.dumps(result, ensure_ascii=False))
-
 if __name__ == "__main__":
-    log_to_file("脚本启动")
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    # while True:  # 保持脚本运行
+    # region # 访问参数配置
+    edge_options = Options()
+    edge_options.add_argument("--disable-blink-features=AutomationControlled")
+    edge_options.add_experimental_option("excludeSwitches", ["enable-automation", "enable-logging"])  # 禁用日志
+    edge_options.add_argument("--log-level=3")  # 关闭所有日志（FATAL 级别）
+    edge_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+    edge_options.add_argument("--headless=new")  # 启用无头模式
+    # endregion
+    service = Service(edge_driver_path)
+    driver = webdriver.Edge(service=service, options=edge_options)
     try:
-        username = sys.argv[1]
-        password = sys.argv[2]
-        # # 创建并启动线程
-        # username_check_thread = threading.Thread(target=check_username, args=())
-        # login_thread = threading.Thread(target=login, args=())
-        #
-        # username_check_thread.start()
-        # login_thread.start()
-        #
-        # # 等待两个线程完成
-        # username_check_thread.join()
-        # login_thread.join()
+        username = sys.stdin.readline().strip()
+        password = sys.stdin.readline().strip()
+        log_to_file("脚本启动")
+
         if check_username():
             exit(1)
 
-        result = login_bitzh(username, password, headless=False)
+        result = login_bitzh(username, password)
         print(json.dumps(result, ensure_ascii=False))
 
     except Exception as e:
         print(json.dumps({"message": f"程序异常错误: {str(e)}", "data": None}))
-        sys.stdout.flush()

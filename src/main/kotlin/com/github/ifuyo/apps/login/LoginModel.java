@@ -1,12 +1,14 @@
 package com.github.ifuyo.apps.login;
 
 import com.github.ifuyo.config.Settings;
+import com.github.ifuyo.entity.StudentEntity;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import static com.github.ifuyo.apps.Api.getVerseV1;
 import javax.crypto.Cipher;
@@ -16,6 +18,7 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 public class LoginModel {
+    public LoginModel() {}
     // 获取诗句
     public String getVerse() {
         return Objects.requireNonNull(getVerseV1()).getContent();
@@ -28,24 +31,16 @@ public class LoginModel {
 
     public JSONObject validateLogin(String username, String password) {
         try {
-            // 调用 Python 脚本验证密码
-            String pythonInterpreter = ".venv\\Scripts\\python.exe";
-            String scriptPath = "src/main/resources/python/login_bitzh.py";
+            LocalDateTime currentTime = LocalDateTime.now();
+            System.out.println("当前时间: " + currentTime);
 
-            // 启动 Python 进程
-            System.out.println(scriptPath);
-            Process process = Runtime.getRuntime().exec(new String[]{pythonInterpreter, scriptPath, username, password});
+            String result = (Settings.executePythonScript(username, password));
+            System.out.println(result);
+            // 保存个人信息
+            StudentEntity student = StudentEntity.getStudentInfo();
+            student.parseAndSetStudentInfo(result);
 
-            // 读取 Python 脚本的标准输出
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8));
-            StringBuilder output = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                output.append(line);
-            }
-            String result = output.toString();
-            System.out.println("Raw Python Output: " + result);
+            System.out.println(StudentEntity.getStudentInfo().getId());
             // 解析 JSON 响应
             return new JSONObject(result);
         } catch (Exception ex) {
